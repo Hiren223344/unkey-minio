@@ -2,15 +2,14 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install base tools
+# Base tools
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
     ca-certificates \
     bash \
-    nano \
-    unzip \
     jq \
+    nano \
     && rm -rf /var/lib/apt/lists/*
 
 # ----------------------------
@@ -20,37 +19,34 @@ RUN wget -O /usr/local/bin/minio https://dl.min.io/server/minio/release/linux-am
     chmod +x /usr/local/bin/minio
 
 # ----------------------------
-# Install Unkey CLI (Correct way)
+# Install Unkey CLI (FIXED VERSION)
 # ----------------------------
-RUN wget -O /usr/local/bin/unkey https://github.com/unkeyed/unkey/releases/latest/download/unkey_linux_amd64 && \
+RUN wget -O /usr/local/bin/unkey https://github.com/unkeyed/unkey/releases/download/v1.5.20/unkey_linux_amd64 && \
     chmod +x /usr/local/bin/unkey
 
 # ----------------------------
-# Create folders
+# Create storage
 # ----------------------------
-RUN mkdir -p /data /config
+RUN mkdir -p /data
 
 # ----------------------------
-# Expose ports
+# Ports
 # ----------------------------
-# 9000 → MinIO
-# 9001 → MinIO Console
-# 3000 → Your API / Unkey Agent
 EXPOSE 9000
 EXPOSE 9001
 EXPOSE 3000
 
 # ----------------------------
-# Default credentials (change in prod)
+# MinIO credentials
 # ----------------------------
 ENV MINIO_ROOT_USER=unkey
 ENV MINIO_ROOT_PASSWORD=unkey123
 
 # ----------------------------
-# Start everything
+# Startup
 # ----------------------------
 CMD bash -c "\
 minio server /data --console-address :9001 & \
-sleep 5 && \
+sleep 4 && \
 unkey server \
 "
