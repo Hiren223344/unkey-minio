@@ -1,0 +1,19 @@
+{
+  "authToken": "${UNKEY_ROOT_KEY}",
+  "db": {
+    "type": "sqlite",
+    "url": "file:/data/unkey.db"
+  },
+  "services": {
+    "vault": {
+      "s3Url": "http://localhost:9000",
+      "s3Bucket": "unkey",
+      "s3AccessKeyId": "${S3_ACCESS_KEY}",
+      "s3AccessKeySecret": "${S3_SECRET_KEY}",
+      "masterKeys": "${UNKEY_MASTER_KEY}"
+    }
+  },
+  "http": {
+    "port": 8760
+  }
+}
